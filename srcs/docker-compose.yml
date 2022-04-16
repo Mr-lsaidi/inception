@@ -2,19 +2,19 @@ version: "3.3"
 services:
 
   #nginx
-  nginx:
-    build: ./requirements/nginx/
-    container_name: nginx
-    restart: always
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - wp-volume:/www/wordpress
-    depends_on:
-      - wordpress
-    networks:
-      - wp
+  # nginx:
+  #   build: ./requirements/nginx/
+  #   container_name: nginx
+  #   restart: always
+  #   ports:
+  #     - 80:80
+  #     - 443:443
+  #   volumes:
+  #     - wp-volume:/www/wordpress
+  #   depends_on:
+  #     - wordpress
+  #   networks:
+  #     - wp
 
   #Wordpress & PHP
   wordpress:
@@ -33,28 +33,29 @@ services:
       - wp
 
   # DataBase
-  mariadb:
-    build: ./requirements/mariadb/
-    container_name: mariadb
-    restart: always
-    ports:
-      - "3306:3306"
-    volumes:
-      - /var/lib/mysql
-    env_file:
-      - ./.env
-    networks:
-      - wp
+  # mariadb:
+  #   build: ./requirements/mariadb/
+  #   container_name: mariadb
+  #   restart: always
+  #   ports:
+  #     - "3306:3306"
+  #   volumes:
+  #     - /var/lib/mysql
+  #   env_file:
+  #     - ./.env
+  #   networks:
+  #     - wp
 
   # php adminer  
-  adminer:
-    build: ./requirements/bonus/
-    container_name: bonus
-    restart: always
-    ports:
-      - "5000:5000"
-    networks:
-      - wp
+  # adminer:
+  #   build: ./requirements/bonus/Adminer
+  #   container_name: bonus
+  #   restart: always
+  #   ports:
+  #     - "5000:5000"
+  #   networks:
+  #     - wp
+
 
 volumes:
     wp-volume:

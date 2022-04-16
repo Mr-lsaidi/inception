@@ -83,6 +83,8 @@ define( 'AUTH_SALT',        getenv_docker('WORDPRESS_AUTH_SALT',        'e5984bf
 define( 'SECURE_AUTH_SALT', getenv_docker('WORDPRESS_SECURE_AUTH_SALT', '628d590589fa1671b89b3517637a69a30acb053b') );
 define( 'LOGGED_IN_SALT',   getenv_docker('WORDPRESS_LOGGED_IN_SALT',   'f8ce3793f86a9aa043b040bb799f9ad06a341a7d') );
 define( 'NONCE_SALT',       getenv_docker('WORDPRESS_NONCE_SALT',       'b26358cfd7da68f913e497e7425b04e163493fb2') );
+define( 'WP_CACHE_KEY_SALT', 'https://10.11.100.74' );
+define( 'WP_CACHE', true );
 // (See also https://wordpress.stackexchange.com/a/152905/199287)
 
 /**#@-*/

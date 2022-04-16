@@ -7,14 +7,14 @@ compose-down: ## Build the container without caching
 add_mariadb_ip: 
 	sh ./srcs/requirements/tools/updateIP.sh
 
-build: add_mariadb_ip ## setup all services (wordpress, mariadb, nginx)
+build_all: add_mariadb_ip ## setup all services (wordpress, mariadb, nginx)
 	docker-compose -f ./srcs/docker-compose.yml up --build
 
 up:  ## setup all services (wordpress, mariadb, nginx)
 	docker-compose -f ./srcs/docker-compose.yml up
 
 down: ## stop all services (wordpress, mariadb, nginx)
-	docker-compose down
+	docker-compose -f ./srcs/docker-compose.yml down
 
 start:  ## Start and run container
 	docker run -p $(ports) -d $(of)
