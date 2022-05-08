@@ -8,11 +8,7 @@ help: ## usage
 down: rmv ## compose down all container without caching
 	docker-compose --log-level CRITICAL -f ${COMPOSE_LOCATION} down -v
 
-<<<<<<< HEAD
 build: down volumes set_host ## setup all services (wordpress, mariadb, nginx) + Bonus
-=======
-build: volumes set_host ## setup all services (wordpress, mariadb, nginx) + Bonus
->>>>>>> b6ba201b452249b80d9104350ef59014e60f3aae
 	docker-compose --log-level CRITICAL -f ${COMPOSE_LOCATION} up --build
 
 set_host:
@@ -28,19 +24,11 @@ clean_all: ## remove all conatiers and images exist
 	docker rm -f `docker ps -aq`; docker rmi -f `docker images -q`
 
 rmv:
-<<<<<<< HEAD
 	sudo rm -rf ${VOLUME_LOCATION}
 
 volumes: rmv
 	mkdir -p ${VOLUME_LOCATION}/db
 	mkdir -p ${VOLUME_LOCATION}/wp
-=======
-	sudo rm -rf /home/lsaidi/data
-
-volumes: rmv
-	mkdir -p /home/lsaidi/data/db
-	mkdir -p /home/lsaidi/data/wp
->>>>>>> b6ba201b452249b80d9104350ef59014e60f3aae
 
 
 
