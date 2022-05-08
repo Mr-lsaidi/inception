@@ -13,9 +13,5 @@ RUN apk update && \
 
 RUN mv tmp/nginx.conf /etc/nginx/nginx.conf
 
-# RUN openrc
-# RUN ls -la /run/
-# RUN ls -la /run/openrc/
-# RUN touch /run/openrc/softlevel
-
 CMD [ "nginx",  "-g", "daemon off;" ]
+

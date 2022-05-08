@@ -1,22 +1,22 @@
 version: "3.3"
 services:
 
+  ################################ Mandatory ####################################     
   # nginx
   nginx:
     build: ./requirements/nginx/
     container_name: nginx
     restart: always
     ports:
-      - 80:80
-      - 443:443
+      - "443:443"
     volumes:
-      - wp-volume:/www/wordpress
+      - wp:/www/wordpress
     depends_on:
       - wordpress
     networks:
       - wp
 
-  #Wordpress & PHP
+  # Wordpress & PHP
   wordpress:
     build: ./requirements/wordpress/
     container_name: wordpress
@@ -24,25 +24,11 @@ services:
     ports:
       - "9000:9000"
     volumes:
-      - wp-volume:/www/wordpress
+      - wp:/www/wordpress
     depends_on:
       - mariadb
     env_file:
       - ./.env
-    networks:
-      - wp
-
-   # php adminer  
-  redis:
-    build: ./requirements/bonus/Redis
-    container_name: bonus_redis
-    restart: always
-    volumes:
-      - wp-volume:/www/wordpress
-    depends_on:
-      - wordpress
-    ports:
-      - '6379:6379'
     networks:
       - wp
 
@@ -54,27 +40,99 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - /var/lib/mysql
+      - db:/var/lib/mysql
     env_file:
       - ./.env
     networks:
       - wp
 
+
+  # ################################ bonus ####################################     
+
   # php adminer  
   adminer:
     build: ./requirements/bonus/Adminer
-    container_name: bonus_adminer
+    container_name: adminer
     restart: always
     ports:
       - "5000:5000"
     networks:
       - wp
 
+  # php redis  
+  redis:
+    build: ./requirements/bonus/Redis
+    container_name: redis
+    restart: always
+    depends_on:
+      - wordpress
+    ports:
+      - '6379:6379'
+    networks:
+      - wp
 
-volumes:
-    wp-volume:
+  # website  
+  website:
+    build: ./requirements/bonus/Website
+    container_name: website
+    restart: always
+    volumes:
+      - /var/www/localhost/htdocs
+    ports:
+      - "8080:8080"
+    networks:
+      - wp
+
+  # ftp  
+  ftp:
+    build: ./requirements/bonus/Ftp
+    container_name: ftp
+    restart: always
+    ports:
+      - "21:21"
+      - "21000:21000"
+    depends_on:
+      - wordpress
+    volumes:
+      - wp:/home/lsaidi/ftp
+    networks:
+      - wp
+    env_file:
+      - ./.env
+
+  # cadvisor
+  cadvisor:
+    build: ./requirements/bonus/Cadvisor
+    container_name: cadvisor
+    restart: always
+    ports:
+      - "8081:8081"
+    volumes:
+      - /:/rootfs:ro 
+      - /var/run:/var/run:ro 
+      - /sys:/sys:ro 
+      - /var/lib/docker/:/var/lib/docker:ro 
+      - /dev/disk/:/dev/disk:ro 
+    networks:
+      - wp
 
 # Networks
 networks:
   wp:
-    name: wp
+    name: wp_network
+
+volumes:
+  wp:
+    name: wordpress_volume
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/lsaidi/data/wp
+      o: bind
+  db:
+    name: mariadb_volume
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/lsaidi/data/db
+      o: bind
