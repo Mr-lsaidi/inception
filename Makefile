@@ -8,8 +8,8 @@ help: ## usage
 down: rmv ## compose down all container without caching
 	docker-compose --log-level CRITICAL -f ${COMPOSE_LOCATION} down -v
 
-build: down volumes set_host ## setup all services (wordpress, mariadb, nginx) + Bonus
-	docker-compose --log-level CRITICAL -f ${COMPOSE_LOCATION} up --build
+build: create_volume set_host ## setup all services (wordpress, mariadb, nginx) + Bonus
+	docker-compose --log-level CRITICAL -f ${COMPOSE_LOCATION} up --build -d
 
 set_host:
 	sh srcs/requirements/tools/host_name.sh ${DOMAIN_NAME}
@@ -20,17 +20,16 @@ start:  ## Start and run container | make start "YOUR PORT" "IMG ID"
 stop: ## Stop and remove a running container | make stop "IMG ID"
 	docker stop $(of); docker rm $(of)
 
-clean_all: ## remove all conatiers and images exist
+clean_all: rmv## remove all conatiers and images exist
+	docker-compose --log-level CRITICAL -f ${COMPOSE_LOCATION} down -v
 	docker rm -f `docker ps -aq`; docker rmi -f `docker images -q`
 
 rmv:
 	sudo rm -rf ${VOLUME_LOCATION}
 
-volumes: rmv
-	mkdir -p ${VOLUME_LOCATION}/db
-	mkdir -p ${VOLUME_LOCATION}/wp
-
-
+create_volume:
+	sh srcs/requirements/tools/create_volumes.sh ${VOLUME_LOCATION}
+	chmod 777 ${VOLUME_LOCATION}
 
 .DEFAULT_GOAL := help
 

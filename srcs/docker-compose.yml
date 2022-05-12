@@ -76,8 +76,6 @@ services:
     build: ./requirements/bonus/Website
     container_name: website
     restart: always
-    volumes:
-      - /var/www/localhost/htdocs
     ports:
       - "8080:8080"
     networks:
